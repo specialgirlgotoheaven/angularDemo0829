@@ -2,15 +2,39 @@
  * 这里是书籍列表模块
  * @type {[type]}
  */
-var bookListModule = angular.module("BookListModule", []);
+var bookListModule = angular.module("BookListModule", []);//要把这个模块注入到runApp的声明中
 
 bookListModule.controller('loginController',function ($scope,$state) {
     $scope.login=function () {
-        alert("我在做登录");
+        alert("正在做登录");
         $state.go('booklist',{bookType:0});
     }
 
 });
+bookListModule.directive('hello',function () {
+    return{
+        restrict:"AE",
+        template:'<div ng-click="click()" ng-hide="hide">hello,directive!!!you can click me!<div ng-transclude></div></div>',
+        replace:false,
+        transclude:true,//指令之间相互嵌套
+        link:function (scope,element,attrs) {
+            scope.click=function () {
+                if(scope.hide==true){
+                    //alert("重新显示");
+                    scope.hide=false;
+                }else{
+                    scope.hide=true;
+                }
+
+
+                alert("directive click");
+                //alert(element[0])
+            }
+        }
+    }
+
+});
+
 
 bookListModule.controller('BookListCtrl', function($scope, $http, $state, $stateParams,bookListService) {
     $scope.filterOptions = {
@@ -146,4 +170,16 @@ bookDetailModule.controller('BookDetailCtrl', function($scope, $http, $state, $s
     $scope.getBookDetail();
 
     
+});
+bookDetailModule.directive('helloTable',function () {
+    return{
+        restrict:"AE",
+        template:'url url',
+        templateUrl:'hello.html',
+        replace:true,
+        link:function (scope,element,attrs) {
+            scope.items=[11,22,33,44,55,66];
+        }
+    }
+
 });
